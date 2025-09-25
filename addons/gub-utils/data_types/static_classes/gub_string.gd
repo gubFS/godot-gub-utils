@@ -13,3 +13,10 @@ static func replace_extension(s: String, new_extension: String) -> String:
 	s = s.left(-(s.get_extension().length()+1))
 	s += "." + new_extension
 	return s
+
+## retuns "" if there is no extension
+static func get_extension_with_period(s: String) -> String:
+	var extension: String = s.get_extension()
+	if extension != "":
+		extension = "." + extension
+	return extension

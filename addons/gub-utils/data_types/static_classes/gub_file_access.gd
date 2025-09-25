@@ -12,6 +12,10 @@ static func store_8s(file: FileAccess, amount_in_bytes: int = 1, value: int = 0)
 	for i in amount_in_bytes:
 		file.store_8(value)
 
+static func store_32s(file: FileAccess, amount_in_bytes: int = 1, value: int = 0) -> void:
+	for i in amount_in_bytes:
+		file.store_32(value)
+
 # stores and returns
 static func store_32_at(file: FileAccess, offset: int, value: int) -> void:
 	var origin: int = file.get_position()

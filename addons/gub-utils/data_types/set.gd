@@ -6,9 +6,13 @@ var _set: Array[Variant] = []
 func values() -> Array[Variant]:
 	return _set
 
-func add(value: Variant) -> void:
-	if !_set.has(value):
-		_set.append(value)
+## Callable is a method that returns true if the parameter, and the object is equal
+func add(value: Variant, comparison: Callable = func(value: Variant, compare_value: Variant) -> bool: return value == compare_value) -> void:
+	for compare_value: Variant in _set:
+		if comparison.call(value, compare_value):
+			return
+	
+	_set.append(value)
 
 func clear() -> void:
 	_set.clear()

@@ -11,3 +11,37 @@ static func file_exists_recursive(dir_path: String, filename: String) -> String:
 		if file != "":
 			return file
 	return ""
+
+## calls the callable with parameters (DirAccess, filename: String)
+static func traverse(dir_path: String, callable: Callable) -> void:
+	var dir = DirAccess.open(dir_path)
+	dir.include_navigational = false
+	if dir:
+		dir.list_dir_begin()
+		var filename = dir.get_next()
+		while filename != "":
+			callable.call(dir, filename)
+			filename = dir.get_next()
+	dir.list_dir_end()
+
+## calls the callable with parameters (DirAccess, filename: String)
+static func traverse_recursive(dir_path: String, callable: Callable) -> void:
+	GubDirAccess.traverse(dir_path, func(dir: DirAccess, filename: String) -> void:
+		callable.call(dir, filename)
+		if dir.current_is_dir():
+			GubDirAccess.traverse_recursive(dir.get_current_dir() + "/" + filename, callable)
+	)
+
+## calls the callable with parameters (DirAccess, filename: String)
+static func traverse_files(dir_path: String, callable: Callable) -> void:
+	GubDirAccess.traverse(dir_path, func(dir: DirAccess, filename: String) -> void:
+		if !dir.current_is_dir():
+			callable.call(dir, filename)
+	)
+
+## calls the callable with parameters (DirAccess, filename: String)
+static func traverse_files_recursive(dir_path: String, callable: Callable) -> void:
+	GubDirAccess.traverse_recursive(dir_path, func(dir: DirAccess, filename: String) -> void:
+		if !dir.current_is_dir():
+			callable.call(dir, filename)
+	)
