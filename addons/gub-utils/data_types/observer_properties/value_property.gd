@@ -4,7 +4,7 @@ class_name ValueProperty
 var value : Variant:
 	set(value_):
 		value = value_
-		changed.emit(value)
+		_emit_changed()
 
 @warning_ignore("untyped_declaration") func _init(value_ = null) -> void:
 	self.value = value_ 
@@ -23,3 +23,6 @@ func bind(obj: Object, property: String) -> void:
 
 func _to_string() -> String:
 	return str(value)
+
+func _emit_changed() -> void:
+	changed.emit(value)
