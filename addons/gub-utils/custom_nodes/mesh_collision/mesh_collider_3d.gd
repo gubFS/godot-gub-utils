@@ -4,7 +4,7 @@ extends MeshInstance3D
 var collision_mesh_3d: CollisionMesh3D = null
 
 func _ready() -> void:
-	collision_mesh_3d = GubNode.construct(CollisionMesh3D.new(), func(node: CollisionMesh3D) -> void:
+	collision_mesh_3d = Builder.build(CollisionMesh3D.new(), func(node: CollisionMesh3D) -> void:
 		node.mesh = mesh
 	)
 	
