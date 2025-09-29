@@ -27,8 +27,3 @@ static func add_child(parent: Node, children: Array[Node]) -> Node:
 		parent.add_child(child)
 	
 	return parent
-
-## Calls the constructor with node given as parameter and returns the node. Can be used in daisy-chaining.
-static func construct(node: Node, constructor: Callable) -> Node:
-	constructor.call(node)
-	return node
