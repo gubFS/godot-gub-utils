@@ -1,1 +1,1 @@
-Some utillity classes and nodes that I find useful. They are made and are inteded to be used by me privately. So no backward compatitibilty or logic or reason. With that in mind, feel free to copy or use anything here if you'd like though :) 
+Some utillity classes and nodes that I find useful. They are made by me and are inteded to be used by me privately. So no backward compatitibilty or logic or reason necessarily. With that in mind, feel free to copy or use anything here if you'd like though :) 
