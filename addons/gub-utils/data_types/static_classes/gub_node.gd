@@ -27,3 +27,18 @@ static func add_child(parent: Node, children: Array[Node]) -> Node:
 		parent.add_child(child)
 	
 	return parent
+
+static func print_node_tree(node: Node) -> void:
+	print(node.get_class())
+	traverse_children(node, func(child: Node, depth: int) -> void:
+		var s: String = ""
+		for i in depth:
+			s += "\t"
+		s += child.get_class()
+		print(s)
+	, 1)
+
+static func traverse_children(node: Node, callable: Callable, depth: int = 0) -> void:
+	for child: Node in node.get_children():
+		callable.call(child, depth)
+		traverse_children(child, callable, depth + 1)
