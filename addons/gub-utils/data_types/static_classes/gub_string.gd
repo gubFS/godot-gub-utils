@@ -9,8 +9,11 @@ static func remove_last(s : String) -> String:
 static func sub_string(s : String, from : int, to : int) -> String:
 	return s.substr(from, to - from)
 
+static func remove_extension(s: String) -> String:
+	return s.left(-(s.get_extension().length()+1))
+
 static func replace_extension(s: String, new_extension: String) -> String:
-	s = s.left(-(s.get_extension().length()+1))
+	s = remove_extension(s)
 	s += "." + new_extension
 	return s
 
