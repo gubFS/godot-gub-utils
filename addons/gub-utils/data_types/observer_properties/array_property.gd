@@ -16,7 +16,7 @@ func append(...values: Array) -> void:
 
 func erase(...values: Array) -> void:
 	for value_: Variant in values:
-		array.erase(value)
+		array.erase(value_)
 	_emit_changed()
 
 func clear() -> void:
