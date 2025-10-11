@@ -7,13 +7,15 @@ var string_precision : int # -1 for no value
 
 func _init(value_ : float = 0.0, min_value_ : float = FLOAT.MIN, max_value_ : float = FLOAT.MAX, string_precision_ : int = 2) -> void:
 	super(value_)
-	value = value as float
 	
 	min_value = min_value_
 	max_value = max_value_
 	string_precision = string_precision_
 	
 	on_changed(_limit_value)
+
+func get_value() -> float:
+	return value
 
 func _to_string() -> String:
 	var decimal_precision : String = "." + str(string_precision)

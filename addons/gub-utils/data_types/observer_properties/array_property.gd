@@ -10,6 +10,9 @@ var array: Array:
 func _init(value_ : Array = []) -> void:
 	super(value_)
 
+func get_value() -> Array:
+	return array
+
 func append(...values: Array) -> void:
 	array.append_array(values)
 	_emit_changed()

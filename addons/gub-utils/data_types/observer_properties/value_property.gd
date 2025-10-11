@@ -9,6 +9,9 @@ var value : Variant:
 @warning_ignore("untyped_declaration") func _init(value_ = null) -> void:
 	self.value = value_ 
 
+func get_value() -> Variant:
+	return value
+
 ## Calls the callable with the value as a parameter, whenever the value is changed. 
 ### Also calls it immdeiatly in order to initialize the state. Use the changed signal if unwanted.
 func on_changed(callable : Callable) -> void:
