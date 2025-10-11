@@ -36,19 +36,19 @@ func bind(obj: Object, property: String) -> void:
 ## If changing a inherited variable from whithin the class, it will not call _set(), use self.my_var to use _set(), and emit the signal properly.
 func bind_bidirectional(obj: Object, property: String, on_set_signal: Signal) -> void:
 	# Don't mind the hackyness here, there must be a better way, right?
-	var bind_array: Array[Callable] = []
+	var bind_box: ValueBox = ValueBox.new()
 
 	var bind_callable: Callable = func(value: Variant) -> void:
-		on_set_signal.disconnect(bind_array[0])
+		on_set_signal.disconnect(bind_box.value)
 		obj.set(property, value)
-		on_set_signal.connect(bind_array[0])
+		on_set_signal.connect(bind_box.value)
 	
 	var bidirectional_callable: Callable = func(property_name: StringName, property_value: Variant) -> void:
 		if property_name == property:
 			changed.disconnect(bind_callable)
 			value = property_value
 			changed.connect(bind_callable)
-	bind_array.append(bidirectional_callable)
+	bind_box.set_value(bidirectional_callable)
 
 	on_set_signal.connect(bidirectional_callable)
 	on_changed(bind_callable)
