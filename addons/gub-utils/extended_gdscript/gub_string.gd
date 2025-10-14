@@ -23,3 +23,8 @@ static func get_extension_with_period(s: String) -> String:
 	if extension != "":
 		extension = "." + extension
 	return extension
+
+static func remove_trailing_whitespace(s: String) -> String:
+	while !s.is_empty() && s.right(1) in ["\n", "\t", " "]:
+		s = remove_last(s)
+	return s
