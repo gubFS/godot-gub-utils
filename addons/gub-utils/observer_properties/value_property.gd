@@ -57,10 +57,11 @@ func on_changed_bidirectional(callable: Callable, bidirectional_signal: Signal, 
 	return connection_id
 
 ## Whenever the value changes, the given property on the given object will also be set to the value.
-func bind(obj: Object, property: String, call_callable: bool = true, connection_id: int = -1) -> int:
+func bind(obj: Object, property: String, source_is_this: bool = true, connection_id: int = -1) -> int:
+	if !source_is_this: value = obj.get(property)
 	var bind_callable: Callable = func(value_: Variant) -> void:
 		obj.set(property, value_)
-	return on_changed(bind_callable, call_callable, connection_id)
+	return on_changed(bind_callable, source_is_this, connection_id)
 
 ## Whenever either the ValueProperty or the property of the object is changed, they both match to equal eachother.
 ## A signal that emits whenever a property is changed, must be passed. The singal should emit like so: ``_on_set.emit(property_name: StringName, property_value: Variant)``
@@ -72,7 +73,8 @@ func bind(obj: Object, property: String, call_callable: bool = true, connection_
 ## ```
 ## And for variables within the class emit the signal, in a custom setter. (remember to also set the value)
 ## If changing a inherited variable from whithin the class, it will not call _set(), use self.my_var to use _set(), and emit the signal properly.
-func bind_bidirectional(obj: Object, property: String, on_set_signal: Signal, call_callable: bool = true, connection_id: int = -1) -> int:
+func bind_bidirectional(obj: Object, property: String, on_set_signal: Signal, source_is_this: bool = true, connection_id: int = -1) -> int:
+	if !source_is_this: value = obj.get(property)
 	var bind_callable: Callable = func(value_: Variant) -> void:
 		obj.set(property, value_)
 	
@@ -80,7 +82,7 @@ func bind_bidirectional(obj: Object, property: String, on_set_signal: Signal, ca
 		if property_name == property:
 			value = property_value
 
-	return on_changed_bidirectional(bind_callable, on_set_signal, bidirectional_callable, call_callable, connection_id)
+	return on_changed_bidirectional(bind_callable, on_set_signal, bidirectional_callable, source_is_this, connection_id)
 
 func remove_connection(connection_id: int) -> void:
 	for connection: Dictionary in _connections[connection_id]:
