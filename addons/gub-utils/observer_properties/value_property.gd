@@ -7,7 +7,7 @@ var value : Variant:
 		_emit_changed()
 
 var next_connection_id: int = 0
-var _connections: Dictionary[int, Array] = {}
+var _connections: Dictionary[int, Array] = {} #Dictionary[int, Array[Dictionary[Callable, Signal]]]
 
 @warning_ignore("untyped_declaration") 
 func _init(value_ = null) -> void:
@@ -21,10 +21,10 @@ func get_unique_connection_id() -> int:
 	next_connection_id += 1
 	return connection_id
 
-func _add_connection(callable: Callable, connection_id: int = -1) -> int:
+func _add_connection(callable: Callable, connection_id: int = -1, signal_: Signal = changed) -> int:
 	if connection_id == -1: connection_id = get_unique_connection_id()
 	_connections.get_or_add(connection_id, [])
-	_connections[connection_id].append(callable)
+	_connections[connection_id].append({callable: signal_})
 	return connection_id
 
 ## Calls the callable with the value as a parameter, whenever the value is changed. 
@@ -53,7 +53,7 @@ func on_changed_bidirectional(callable: Callable, bidirectional_signal: Signal, 
 
 	bidirectional_signal.connect(bidirectional_callable)
 	connection_id = on_changed(callable, connection_id)
-	_add_connection(bidirectional_callable, connection_id)
+	_add_connection(bidirectional_callable, connection_id, bidirectional_signal)
 	return connection_id
 
 ## Whenever the value changes, the given property on the given object will also be set to the value.
@@ -83,8 +83,8 @@ func bind_bidirectional(obj: Object, property: String, on_set_signal: Signal, co
 	return on_changed_bidirectional(bind_callable, on_set_signal, bidirectional_callable, connection_id)
 
 func remove_connection(connection_id: int) -> void:
-	for callable: Callable in _connections[connection_id]:
-		changed.disconnect(callable)
+	for connection: Dictionary in _connections[connection_id]:
+		connection.values()[0].disconnect(connection.keys()[0])
 	_connections[connection_id].clear()
 
 func _to_string() -> String:
