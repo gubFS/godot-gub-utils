@@ -29,14 +29,14 @@ func _add_connection(callable: Callable, connection_id: int = -1, signal_: Signa
 
 ## Calls the callable with the value as a parameter, whenever the value is changed. 
 ## Also calls it immdeiatly in order to initialize the state. Use the changed signal if unwanted.
-func on_changed(callable : Callable, call_callable: bool = false, connection_id: int = -1) -> int:
+func on_changed(callable : Callable, call_callable: bool = true, connection_id: int = -1) -> int:
 	changed.connect(callable)
 	if call_callable: callable.call(value)
 	return _add_connection(callable, connection_id)
 
 ## Whenever this property changes call callable, but disconnect bidirectional_signal first. Whenever bidirectional_signal emits, call bidirectional_callable, but disconnect this property first.
 ## Callable will have the new value passed as an argument, and bidirectional_callable will have whatever arguments bidirectional_signal emitted with.
-func on_changed_bidirectional(callable: Callable, bidirectional_signal: Signal, bidirectional_callable: Callable, call_callable: bool = false, connection_id: int = -1) -> int:
+func on_changed_bidirectional(callable: Callable, bidirectional_signal: Signal, bidirectional_callable: Callable, call_callable: bool = true, connection_id: int = -1) -> int:
 	# Don't mind the hackyness here, surely theres gotta be a better way?
 	var box: ValueBox = ValueBox.new()
 	
@@ -57,7 +57,7 @@ func on_changed_bidirectional(callable: Callable, bidirectional_signal: Signal, 
 	return connection_id
 
 ## Whenever the value changes, the given property on the given object will also be set to the value.
-func bind(obj: Object, property: String, call_callable: bool = false, connection_id: int = -1) -> int:
+func bind(obj: Object, property: String, call_callable: bool = true, connection_id: int = -1) -> int:
 	var bind_callable: Callable = func(value_: Variant) -> void:
 		obj.set(property, value_)
 	return on_changed(bind_callable, call_callable, connection_id)
@@ -72,7 +72,7 @@ func bind(obj: Object, property: String, call_callable: bool = false, connection
 ## ```
 ## And for variables within the class emit the signal, in a custom setter. (remember to also set the value)
 ## If changing a inherited variable from whithin the class, it will not call _set(), use self.my_var to use _set(), and emit the signal properly.
-func bind_bidirectional(obj: Object, property: String, on_set_signal: Signal, call_callable: bool = false, connection_id: int = -1) -> int:
+func bind_bidirectional(obj: Object, property: String, on_set_signal: Signal, call_callable: bool = true, connection_id: int = -1) -> int:
 	var bind_callable: Callable = func(value_: Variant) -> void:
 		obj.set(property, value_)
 	
